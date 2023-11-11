@@ -98,9 +98,9 @@ No *remover(No *raiz, int chave)
                 return NULL;
             }
             else
-            { 
-                //remoçao de nó com um unico filho [em qualquer um dos lado (dir ou esq)]
-                if (raiz->esquerda != NULL || raiz->direita != NULL)
+            {
+                // remoçao de nó com um unico filho [em qualquer um dos lado (dir ou esq)]
+                if (raiz->esquerda == NULL || raiz->direita == NULL)
                 {
                     No *aux = NULL;
                     if (raiz->esquerda != NULL)
@@ -109,6 +109,23 @@ No *remover(No *raiz, int chave)
                         aux = raiz->direita;
                     free(raiz);
                     return aux;
+                }
+                // remoção de nó com 2 filho (esq e dir)
+                else
+                {
+                    if (raiz->esquerda != NULL && raiz->direita != NULL)
+                    {
+                        // antecessor o nó  mais a direita do nó a esquerda
+                        No *aux = raiz->esquerda;
+                        while (aux->direita != NULL)
+                        {
+                            aux = aux->direita;
+                        }
+                        raiz->conteudo = aux->conteudo;
+                        aux->conteudo = chave;
+                        raiz->esquerda = remover(raiz->esquerda, chave);
+                        return raiz;
+                    }
                 }
             }
         }
