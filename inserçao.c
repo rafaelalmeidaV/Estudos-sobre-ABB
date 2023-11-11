@@ -91,9 +91,26 @@ No *remover(No *raiz, int chave)
     {
         if (raiz->conteudo == chave)
         {
+            // remoção de nó folha (Nó sem filho)
             if (raiz->esquerda == NULL && raiz->direita == NULL)
+            {
                 free(raiz);
-            return NULL;
+                return NULL;
+            }
+            else
+            { 
+                //remoçao de nó com um unico filho [em qualquer um dos lado (dir ou esq)]
+                if (raiz->esquerda != NULL || raiz->direita != NULL)
+                {
+                    No *aux = NULL;
+                    if (raiz->esquerda != NULL)
+                        aux = raiz->esquerda;
+                    else
+                        aux = raiz->direita;
+                    free(raiz);
+                    return aux;
+                }
+            }
         }
         else
         {
@@ -115,6 +132,7 @@ int main()
     int op, valor;
     ArvB arv;
     arv.raiz = NULL;
+    No *raiz = NULL;
     int chave;
 
     do
@@ -130,22 +148,21 @@ int main()
         case 1:
             printf("digite um valor");
             scanf("%d", &valor);
-            inserir(&arv, valor);
+            inserir(&raiz, valor);
             break;
         case 2:
             printf("\n Impressao da arvore binaria ");
-            imprimir(arv.raiz);
+            imprimir(raiz);
             break;
         case 3:
             printf("tamanho da nossa arvore: ");
-            int a = tamanho(arv.raiz);
+            int a = tamanho(raiz);
             printf("%d", a);
             break;
         case 4:
-
             printf("digite um numero que deseja buscar");
             scanf("%d", &chave);
-            if (buscar(arv.raiz, chave) == -1)
+            if (buscar(raiz, chave) == -1)
             {
                 printf("este numero nao existe na arvore");
             }
@@ -155,10 +172,12 @@ int main()
             }
             break;
         case 5:
-            printf("digite um valor");
+            printf("digite um valor a ser removido");
             scanf("%d", &valor);
-            inserir(&arv, valor);
+            raiz = remover(raiz, valor);
             break;
+        default:
+            printf("op invalida");
         }
     } while (op != 0);
 }
